@@ -1,69 +1,69 @@
-# Haber Uygulaması - Backend
+# News Application - Backend
 
-Bu proje, modern haber portalı uygulamasının backend kısmıdır. Express.js, TypeScript, PostgreSQL ve Sequelize ORM kullanılarak geliştirilmiştir.
+This project is the backend part of a modern news portal application. It is developed using Express.js, TypeScript, PostgreSQL, and Sequelize ORM.
 
-## Özellikler
+## Features
 
-- 🔐 JWT tabanlı kimlik doğrulama ve yetkilendirme
-- 📰 Haber CRUD işlemleri
-- 🗂️ Kategori yönetimi
-- 💬 Yorum sistemi
-- 👍 Beğeni ve reaksiyon sistemi
-- 📊 API dokümantasyonu (Swagger UI)
-- 🔄 Harici haber API entegrasyonu
+- 🔐 JWT-based authentication and authorization
+- 📰 News CRUD operations
+- 🗂️ Category management
+- 💬 Comment system
+- 👍 Like and reaction system
+- 📊 API documentation (Swagger UI)
+- 🔄 External news API integration
 
-## Teknolojiler
+## Technologies
 
 - **Express.js**: Web framework
-- **TypeScript**: Tip güvenliği için
-- **PostgreSQL**: Veritabanı
-- **Sequelize ORM**: Veritabanı işlemleri için
-- **Sequelize-TypeScript**: TypeScript desteği için
-- **JWT**: Kimlik doğrulama için
-- **bcrypt**: Şifre hashleme için
-- **Swagger UI**: API dokümantasyonu için
-- **dotenv**: Ortam değişkenleri için
-- **cors**: CORS işlemleri için
-- **helmet**: Güvenlik için
+- **TypeScript**: For type safety
+- **PostgreSQL**: Database
+- **Sequelize ORM**: For database operations
+- **Sequelize-TypeScript**: For TypeScript support
+- **JWT**: For authentication
+- **bcrypt**: For password hashing
+- **Swagger UI**: For API documentation
+- **dotenv**: For environment variables
+- **cors**: For CORS operations
+- **helmet**: For security
 
-## Kurulum
+## Installation
 
-### Gereksinimler
+### Requirements
 
-- Node.js (v14 veya üzeri)
-- npm veya yarn
-- PostgreSQL (v12 veya üzeri)
+- Node.js (v14 or higher)
+- npm or yarn
+- PostgreSQL (v12 or higher)
 
-### Adımlar
+### Steps
 
-1. Depoyu klonlayın:
+1. Clone the repository:
 ```bash
-git clone https://github.com/kullaniciadi/haber-backend.git
-cd haber-backend
+git clone https://github.com/yourusername/news-backend.git
+cd news-backend
 ```
 
-2. Bağımlılıkları yükleyin:
+2. Install dependencies:
 ```bash
 npm install
-# veya
+# or
 yarn install
 ```
 
-3. PostgreSQL veritabanı oluşturun:
+3. Create PostgreSQL database:
 ```sql
-CREATE DATABASE haber_db;
+CREATE DATABASE news_db;
 ```
 
-4. Ortam değişkenlerini ayarlayın. `.env` dosyasını kök dizinde oluşturun:
+4. Set environment variables. Create a `.env` file in the root directory:
 ```env
-# Uygulama
+# Application
 PORT=3000
 NODE_ENV=development
 
-# Veritabanı
+# Database
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=haber_db
+DB_NAME=news_db
 DB_USER=postgres
 DB_PASSWORD=yourpassword
 
@@ -71,41 +71,41 @@ DB_PASSWORD=yourpassword
 JWT_SECRET=your_jwt_secret_key
 JWT_EXPIRES_IN=24h
 
-# Harici Haber API
+# External News API
 NEWS_API_KEY=your_news_api_key
 ```
 
-5. TypeScript kodunu derleyin:
+5. Compile TypeScript code:
 ```bash
 npm run build
-# veya
+# or
 yarn build
 ```
 
-6. Veritabanı tablolarını oluşturun:
+6. Create database tables:
 ```bash
 npm run db:sync
-# veya
+# or
 yarn db:sync
 ```
 
-7. Uygulamayı başlatın:
+7. Start the application:
 ```bash
 npm run start
-# veya
+# or
 yarn start
 ```
 
-8. Geliştirme modunda çalıştırmak için:
+8. Run in development mode:
 ```bash
 npm run dev
-# veya
+# or
 yarn dev
 ```
 
-## API Dokümantasyonu
+## API Documentation
 
-API dokümantasyonuna tarayıcı üzerinden erişebilirsiniz:
+You can access the API documentation via browser:
 
 ```
 http://localhost:3000/api-docs
@@ -113,64 +113,64 @@ http://localhost:3000/api-docs
 
 ## API Endpoints
 
-### Kimlik Doğrulama (Auth)
+### Authentication (Auth)
 
-- `POST /api/auth/register` - Yeni kullanıcı kaydı
-- `POST /api/auth/login` - Kullanıcı girişi
-- `GET /api/auth/profile` - Kullanıcı profilini görüntüleme
-- `PUT /api/auth/profile` - Kullanıcı profilini güncelleme
-- `PUT /api/auth/change-password` - Kullanıcı şifresini değiştirme
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `GET /api/auth/profile` - View user profile
+- `PUT /api/auth/profile` - Update user profile
+- `PUT /api/auth/change-password` - Change user password
 
-### Haberler (News)
+### News
 
-- `GET /api/news` - Tüm haberleri getir
-- `GET /api/news/:id` - Belirli bir haberi getir
-- `POST /api/news` - Yeni haber oluştur (admin)
-- `PUT /api/news/:id` - Haberi güncelle (admin)
-- `DELETE /api/news/:id` - Haberi sil (admin)
-- `GET /api/news/fetch/external` - Harici API'den haberleri getir (admin)
+- `GET /api/news` - Get all news
+- `GET /api/news/:id` - Get specific news
+- `POST /api/news` - Create new news (admin)
+- `PUT /api/news/:id` - Update news (admin)
+- `DELETE /api/news/:id` - Delete news (admin)
+- `GET /api/news/fetch/external` - Fetch news from external API (admin)
 
-### Kategoriler (Categories)
+### Categories
 
-- `GET /api/news/categories` - Tüm kategorileri getir
-- `GET /api/news/categories/:id` - Belirli bir kategoriyi getir
-- `POST /api/news/categories` - Yeni kategori oluştur (admin)
-- `PUT /api/news/categories/:id` - Kategoriyi güncelle (admin)
-- `DELETE /api/news/categories/:id` - Kategoriyi sil (admin)
+- `GET /api/news/categories` - Get all categories
+- `GET /api/news/categories/:id` - Get specific category
+- `POST /api/news/categories` - Create new category (admin)
+- `PUT /api/news/categories/:id` - Update category (admin)
+- `DELETE /api/news/categories/:id` - Delete category (admin)
 
-### Yorumlar (Comments)
+### Comments
 
-- `GET /api/comments/news/:newsId` - Bir habere ait yorumları getir
-- `POST /api/comments` - Yeni yorum oluştur
-- `PUT /api/comments/:id` - Yorumu güncelle
-- `DELETE /api/comments/:id` - Yorumu sil
+- `GET /api/comments/news/:newsId` - Get comments for a news article
+- `POST /api/comments` - Create new comment
+- `PUT /api/comments/:id` - Update comment
+- `DELETE /api/comments/:id` - Delete comment
 
-### Reaksiyonlar (Reactions)
+### Reactions
 
-- `GET /api/reactions/news/:newsId` - Bir habere ait reaksiyonları getir
-- `GET /api/reactions/user/news/:newsId` - Kullanıcının bir habere yaptığı reaksiyonu getir
-- `POST /api/reactions` - Reaksiyon ekle/güncelle
-- `DELETE /api/reactions/news/:newsId` - Reaksiyonu kaldır
+- `GET /api/reactions/news/:newsId` - Get reactions for a news article
+- `GET /api/reactions/user/news/:newsId` - Get user's reaction to a news article
+- `POST /api/reactions` - Add/update reaction
+- `DELETE /api/reactions/news/:newsId` - Remove reaction
 
-## Proje Yapısı
+## Project Structure
 
 ```
 /src
-  /config             # Yapılandırma dosyaları
-  /interfaces         # TypeScript interface'leri
-  /middlewares        # Express middleware'leri
-  /services           # Servisler
-    /auth             # Kimlik doğrulama servisi
-      /controllers    # Controller'lar
-      /models         # Sequelize modelleri
-      /routes         # Express route'ları
-    /news             # Haber servisi
-    /comment          # Yorum servisi
-  /utils              # Yardımcı fonksiyonlar
-  index.ts            # Ana giriş dosyası
+  /config             # Configuration files
+  /interfaces         # TypeScript interfaces
+  /middlewares        # Express middlewares
+  /services           # Services
+    /auth             # Authentication service
+      /controllers    # Controllers
+      /models         # Sequelize models
+      /routes         # Express routes
+    /news             # News service
+    /comment          # Comment service
+  /utils              # Helper functions
+  index.ts            # Main entry file
 ```
 
-## Veritabanı Şeması
+## Database Schema
 
 ```
 ┌─────────────┐       ┌─────────────┐
@@ -217,31 +217,25 @@ http://localhost:3000/api-docs
 └─────────────┘
 ```
 
-## Hata Giderme
+## Troubleshooting
 
-**Model not initialized hatası**
+**Model not initialized error**
 
-Eğer "Model not initialized: Member cannot be called" hatası alıyorsanız, database.ts dosyanızda modellerin doğru şekilde Sequelize örneğine eklendiğinden emin olun:
+If you get a "Model not initialized: Member cannot be called" error, make sure that models are properly added to the Sequelize instance in your database.ts file:
 
 ```typescript
 // config/database.ts
 import { Sequelize } from 'sequelize-typescript';
 import User from '../services/auth/models/user.model';
 import News from '../services/news/models/news.model';
-// Diğer modelleri içe aktarın
+// Import other models
 
 const sequelize = new Sequelize({
-  // veritabanı yapılandırması...
-  models: [User, News, /* diğer modeller... */],
+  // database configuration...
+  models: [User, News, /* other models... */],
 });
 ```
 
-## Lisans
+## License
 
-Bu proje MIT lisansı altında lisanslanmıştır.
-
-## İletişim
-
-Proje Sahibi - [@github_handle](https://github.com/github_handle)
-
-Proje Linki: [https://github.com/github_handle/haber-backend](https://github.com/github_handle/haber-backend)
+This project is licensed under the MIT License.
