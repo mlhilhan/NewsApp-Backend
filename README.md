@@ -37,12 +37,14 @@ This project is the backend part of a modern news portal application. It is deve
 ### Steps
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/news-backend.git
 cd news-backend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -50,11 +52,13 @@ yarn install
 ```
 
 3. Create PostgreSQL database:
+
 ```sql
 CREATE DATABASE news_db;
 ```
 
 4. Set environment variables. Create a `.env` file in the root directory:
+
 ```env
 # Application
 PORT=3000
@@ -76,6 +80,7 @@ NEWS_API_KEY=your_news_api_key
 ```
 
 5. Compile TypeScript code:
+
 ```bash
 npm run build
 # or
@@ -83,6 +88,7 @@ yarn build
 ```
 
 6. Create database tables:
+
 ```bash
 npm run db:sync
 # or
@@ -90,6 +96,7 @@ yarn db:sync
 ```
 
 7. Start the application:
+
 ```bash
 npm run start
 # or
@@ -97,6 +104,7 @@ yarn start
 ```
 
 8. Run in development mode:
+
 ```bash
 npm run dev
 # or
@@ -132,11 +140,11 @@ http://localhost:3000/api-docs
 
 ### Categories
 
-- `GET /api/news/categories` - Get all categories
-- `GET /api/news/categories/:id` - Get specific category
-- `POST /api/news/categories` - Create new category (admin)
-- `PUT /api/news/categories/:id` - Update category (admin)
-- `DELETE /api/news/categories/:id` - Delete category (admin)
+- `GET /api/categories` - Get all categories
+- `GET /api/categories/:id` - Get specific category
+- `POST /api/categories` - Create new category (admin)
+- `PUT /api/categories/:id` - Update category (admin)
+- `DELETE /api/categories/:id` - Delete category (admin)
 
 ### Comments
 
@@ -225,14 +233,14 @@ If you get a "Model not initialized: Member cannot be called" error, make sure t
 
 ```typescript
 // config/database.ts
-import { Sequelize } from 'sequelize-typescript';
-import User from '../services/auth/models/user.model';
-import News from '../services/news/models/news.model';
+import { Sequelize } from "sequelize-typescript";
+import User from "../services/auth/models/user.model";
+import News from "../services/news/models/news.model";
 // Import other models
 
 const sequelize = new Sequelize({
   // database configuration...
-  models: [User, News, /* other models... */],
+  models: [User, News /* other models... */],
 });
 ```
 

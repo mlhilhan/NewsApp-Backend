@@ -44,7 +44,7 @@ const router = Router();
 
 /**
  * @swagger
- * /news/categories:
+ * /categories:
  *   get:
  *     summary: Tüm kategorileri listele
  *     tags: [Categories]
@@ -67,7 +67,7 @@ router.get("/", categoryController.getAllCategories);
 
 /**
  * @swagger
- * /news/categories/{id}:
+ * /categories/{id}:
  *   get:
  *     summary: Belirli bir kategoriyi getir
  *     tags: [Categories]
@@ -97,7 +97,7 @@ router.get("/:id", categoryController.getCategoryById);
 
 /**
  * @swagger
- * /news/categories:
+ * /categories:
  *   post:
  *     summary: Yeni kategori oluştur
  *     tags: [Categories]
@@ -138,7 +138,7 @@ router.post(
 
 /**
  * @swagger
- * /news/categories/{id}:
+ * /categories/{id}:
  *   put:
  *     summary: Kategoriyi güncelle
  *     tags: [Categories]
@@ -184,7 +184,7 @@ router.put(
 
 /**
  * @swagger
- * /news/categories/{id}:
+ * /categories/{id}:
  *   delete:
  *     summary: Kategoriyi sil
  *     tags: [Categories]

@@ -15,6 +15,7 @@ import { notFoundHandler, errorHandler } from "./middlewares/error.middleware";
 import authRoutes from "./services/auth/index";
 import newsRoutes from "./services/news/index";
 import commentRoutes from "./services/comment/index";
+import categoryRoutes from "./services/news/routes/category.routes";
 
 // Ortam değişkenlerini yükle
 dotenv.config();
@@ -26,6 +27,7 @@ const PORT = process.env.API_PORT || 3000;
 // Middleware'leri ekle
 app.use(cors());
 app.use(helmet());
+app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
@@ -33,7 +35,7 @@ app.use(morgan("dev"));
 // Ana route
 app.get("/", (req, res) => {
   res.json({
-    service: "Haber Uygulaması API",
+    service: "News Application API",
     status: "active",
     timestamp: new Date(),
   });
@@ -51,6 +53,7 @@ app.get(
 
 // Servisleri bağla
 app.use("/api/auth", authRoutes);
+app.use("/api/categories", categoryRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api", commentRoutes);
 

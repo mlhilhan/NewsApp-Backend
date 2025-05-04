@@ -1,25 +1,28 @@
 import { Sequelize } from "sequelize-typescript";
 import dotenv from "dotenv";
-import path from "path";
+import User from "../services/auth/models/user.model";
+import UserPreference from "../services/auth/models/user-preference.model";
+import News from "../services/news/models/news.model";
+import Category from "../services/news/models/category.model";
+import NewsCategory from "../services/news/models/news-category.model";
+import Comment from "../services/comment/models/comment.model";
+import Reaction from "../services/comment/models/reaction.model";
 
-// .env dosyası
+// .env dosyasını yükle
 dotenv.config();
-
-// Model dosyalarının yolu
-const modelsPath = path.join(__dirname, "../services/**/models");
 
 // Veritabanı bağlantı bilgileri
 const dbConfig = {
   host: process.env.DB_HOST || "localhost",
   port: parseInt(process.env.DB_PORT || "5432"),
-  database: process.env.DB_NAME || "news_db",
+  database: process.env.DB_NAME || "haber_db",
   username: process.env.DB_USER || "postgres",
   password: process.env.DB_PASSWORD || "postgres",
   dialect: "postgres" as const,
   logging: process.env.NODE_ENV === "development" ? console.log : false,
 };
 
-// Sequelize örneği
+// Sequelize örneğini oluşturma
 const sequelize = new Sequelize({
   host: dbConfig.host,
   port: dbConfig.port,
@@ -28,11 +31,15 @@ const sequelize = new Sequelize({
   password: dbConfig.password,
   dialect: dbConfig.dialect,
   logging: dbConfig.logging as any,
-  models: [modelsPath],
-  define: {
-    timestamps: true,
-    underscored: true,
-  },
+  models: [
+    User,
+    UserPreference,
+    News,
+    Category,
+    NewsCategory,
+    Comment,
+    Reaction,
+  ],
 });
 
 // Veritabanı bağlantısını test etme fonksiyonu

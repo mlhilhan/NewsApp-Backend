@@ -37,12 +37,14 @@ Bu proje, modern haber portalı uygulamasının backend kısmıdır. Express.js,
 ### Adımlar
 
 1. Depoyu klonlayın:
+
 ```bash
 git clone https://github.com/kullaniciadi/haber-backend.git
 cd haber-backend
 ```
 
 2. Bağımlılıkları yükleyin:
+
 ```bash
 npm install
 # veya
@@ -50,11 +52,13 @@ yarn install
 ```
 
 3. PostgreSQL veritabanı oluşturun:
+
 ```sql
 CREATE DATABASE haber_db;
 ```
 
 4. Ortam değişkenlerini ayarlayın. `.env` dosyasını kök dizinde oluşturun:
+
 ```env
 # Uygulama
 PORT=3000
@@ -76,6 +80,7 @@ NEWS_API_KEY=your_news_api_key
 ```
 
 5. TypeScript kodunu derleyin:
+
 ```bash
 npm run build
 # veya
@@ -83,6 +88,7 @@ yarn build
 ```
 
 6. Veritabanı tablolarını oluşturun:
+
 ```bash
 npm run db:sync
 # veya
@@ -90,6 +96,7 @@ yarn db:sync
 ```
 
 7. Uygulamayı başlatın:
+
 ```bash
 npm run start
 # veya
@@ -97,6 +104,7 @@ yarn start
 ```
 
 8. Geliştirme modunda çalıştırmak için:
+
 ```bash
 npm run dev
 # veya
@@ -132,11 +140,11 @@ http://localhost:3000/api-docs
 
 ### Kategoriler (Categories)
 
-- `GET /api/news/categories` - Tüm kategorileri getir
-- `GET /api/news/categories/:id` - Belirli bir kategoriyi getir
-- `POST /api/news/categories` - Yeni kategori oluştur (admin)
-- `PUT /api/news/categories/:id` - Kategoriyi güncelle (admin)
-- `DELETE /api/news/categories/:id` - Kategoriyi sil (admin)
+- `GET /api/categories` - Tüm kategorileri getir
+- `GET /api/categories/:id` - Belirli bir kategoriyi getir
+- `POST /api/categories` - Yeni kategori oluştur (admin)
+- `PUT /api/categories/:id` - Kategoriyi güncelle (admin)
+- `DELETE /api/categories/:id` - Kategoriyi sil (admin)
 
 ### Yorumlar (Comments)
 
@@ -225,14 +233,14 @@ Eğer "Model not initialized: Member cannot be called" hatası alıyorsanız, da
 
 ```typescript
 // config/database.ts
-import { Sequelize } from 'sequelize-typescript';
-import User from '../services/auth/models/user.model';
-import News from '../services/news/models/news.model';
+import { Sequelize } from "sequelize-typescript";
+import User from "../services/auth/models/user.model";
+import News from "../services/news/models/news.model";
 // Diğer modelleri içe aktarın
 
 const sequelize = new Sequelize({
   // veritabanı yapılandırması...
-  models: [User, News, /* diğer modeller... */],
+  models: [User, News /* diğer modeller... */],
 });
 ```
 
