@@ -1,21 +1,19 @@
-// src/index.ts
 import express, { Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import cron from "node-cron";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger";
-
-// Yapılandırma ve yardımcılar
 import sequelize, { testConnection, syncDatabase } from "./config/database";
 import { notFoundHandler, errorHandler } from "./middlewares/error.middleware";
-
-// Servisler
 import authRoutes from "./services/auth/index";
 import newsRoutes from "./services/news/index";
 import commentRoutes from "./services/comment/index";
 import categoryRoutes from "./services/news/routes/category.routes";
+import { fetchExternalNewsJob } from "./services/news/jobs/news.jobs";
+import { startRSSNewsJob } from "./services/news/jobs/rss-news.job";
 
 // Ortam değişkenlerini yükle
 dotenv.config();
@@ -63,6 +61,19 @@ app.use(notFoundHandler);
 // Global error handler
 app.use(errorHandler);
 
+cron.schedule("*/1 * * * *", async () => {
+  console.log(
+    "Her 15 dakikada bir haberleri çekme işi başlatıldı",
+    new Date().toISOString()
+  );
+  try {
+    await fetchExternalNewsJob();
+    console.log("Haberler başarıyla güncellendi!");
+  } catch (error) {
+    console.error("Zamanlanmış haber çekme işi hatası:", error);
+  }
+});
+
 // Sunucuyu başlat
 const startServer = async () => {
   try {
@@ -74,6 +85,14 @@ const startServer = async () => {
       process.env.NODE_ENV === "development" &&
       process.env.DB_FORCE_SYNC === "true";
     await syncDatabase(forceSync);
+
+    // RSS haber çekme zamanlanmış görevini başlat
+    if (
+      process.env.NODE_ENV === "production" ||
+      process.env.ENABLE_RSS_JOB === "true"
+    ) {
+      startRSSNewsJob();
+    }
 
     // Sunucuyu başlat
     app.listen(PORT, () => {

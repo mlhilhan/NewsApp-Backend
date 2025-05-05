@@ -8,6 +8,7 @@ import {
   IExternalNewsArticle,
 } from "../../../interfaces/news.interface";
 import { Op } from "sequelize";
+import { fetchNewsFromRSS } from "../utils/rss-parser";
 
 /**
  * Tüm haberleri getir
@@ -393,6 +394,30 @@ export const fetchExternalNews = async (
         process.env.NODE_ENV === "development"
           ? (error as Error).message
           : undefined,
+    });
+  }
+};
+
+/**
+ * RSS kaynaklarından haberleri çeker ve veritabanına kaydeder
+ */
+export const fetchRSSNews = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    await fetchNewsFromRSS();
+
+    return res.status(200).json({
+      success: true,
+      message: "RSS kaynaklarından haberler başarıyla çekildi ve kaydedildi",
+    });
+  } catch (error) {
+    console.error("RSS haber çekme hatası:", error);
+    return res.status(500).json({
+      success: false,
+      message: "RSS haberlerini çekerken bir hata oluştu",
+      //error: error.message,
     });
   }
 };

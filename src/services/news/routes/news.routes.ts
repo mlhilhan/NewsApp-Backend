@@ -4,6 +4,7 @@ import {
   verifyTokenMiddleware,
   isAdmin,
 } from "../../../middlewares/auth.middleware";
+import { fetchExternalNewsJob } from "../jobs/news.jobs";
 
 const router = Router();
 
@@ -311,6 +312,34 @@ router.get(
   verifyTokenMiddleware,
   isAdmin,
   newsController.fetchExternalNews
+);
+
+router.post(
+  "/fetch-external",
+  verifyTokenMiddleware,
+  isAdmin,
+  async (req, res) => {
+    try {
+      await fetchExternalNewsJob();
+      return res.status(200).json({
+        success: true,
+        message: "Haberler başarıyla güncellendi",
+      });
+    } catch (error) {
+      console.error("Manuel haber çekme hatası:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Haberler güncellenirken bir hata oluştu",
+      });
+    }
+  }
+);
+
+router.post(
+  "/fetch-rss",
+  verifyTokenMiddleware,
+  isAdmin,
+  newsController.fetchRSSNews
 );
 
 export default router;

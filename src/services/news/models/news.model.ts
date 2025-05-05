@@ -43,6 +43,18 @@ export default class News extends Model<INews> {
   @Column({
     type: DataType.TEXT,
     allowNull: true,
+  })
+  description?: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  url?: string;
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true,
     field: "image_url",
   })
   imageUrl!: string;
