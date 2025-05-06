@@ -1,12 +1,11 @@
 import Parser from "rss-parser";
 import axios from "axios";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import News from "../models/news.model";
 import Category from "../models/category.model";
 import { Op } from "sequelize";
 import { rssSources } from "../config/rss-sources";
 
-// RSS parser örneğini oluştur (daha fazla alanı destekleyecek şekilde)
 const parser = new Parser({
   customFields: {
     item: [
@@ -16,6 +15,8 @@ const parser = new Parser({
       ["link", "link"],
       ["guid", "guid"],
       ["pubDate", "pubDate"],
+      ["enclosure", "enclosure"],
+      ["og:image", "ogImage"],
     ],
   },
 });
@@ -34,17 +35,30 @@ const fetchFullContent = async (
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Accept-Charset": "utf-8",
       },
-      timeout: 10000, // 10 saniye zaman aşımı
+      responseType: "arraybuffer",
+      timeout: 10000,
     });
 
-    const html = response.data;
-    const $ = cheerio.load(html);
+    const html = new TextDecoder("utf-8").decode(response.data);
+    //const $ = cheerio.load(html, { decodeEntities: false });
+    //const $ = cheerio.load(description || "", { decodeEntities: false });
+
+    // HTML içeriğini ve resmi çıkarmada düzeltmeler
+    const $ = cheerio.load(description || "", {
+      decodeEntities: false,
+      normalizeWhitespace: true,
+    });
 
     // Kaynağa göre içerik seçicilerini ayarla (her site için özelleştirilebilir)
     let contentSelector = "";
 
     switch (source) {
+      case "CNN Türk":
+        contentSelector =
+          ".detail-content, .content-text, .haberDetay, .news-detail__content";
+        break;
       case "Hürriyet":
         contentSelector = ".news-content, .news-detail-text";
         break;
@@ -57,9 +71,6 @@ const fetchFullContent = async (
       case "NTV":
         contentSelector = ".category-detail-content-inner";
         break;
-      case "CNN Türk":
-        contentSelector = ".detail-content, .content-text";
-        break;
       case "Habertürk":
         contentSelector = ".news-detail-content";
         break;
@@ -67,7 +78,6 @@ const fetchFullContent = async (
         contentSelector = ".NewsDetailText";
         break;
       default:
-        // Genel içerik seçicileri (çoğu haber sitesinde çalışır)
         contentSelector =
           "article, .article, .content, .news-content, .entry-content, .post-content";
     }
@@ -188,15 +198,35 @@ export const fetchNewsFromRSS = async (): Promise<void> => {
             let imageUrl = null;
 
             // HTML içeriğinden metin çıkar
-            const $ = cheerio.load(description);
+            //const $ = cheerio.load(description || "");
+            const $ = cheerio.load(description || "", {
+              decodeEntities: false,
+            });
 
             // Resim URL'sini bul
+            // if (item.media && item.media.$ && item.media.$.url) {
+            //   imageUrl = item.media.$.url;
+            // } else if (description) {
+            //   const imgTag = $("img").first();
+            //   if (imgTag.length) {
+            //     imageUrl = imgTag.attr("src");
+            //   }
+            // }
+            // Resim URL'sini bulmak için genişletilmiş yöntem
             if (item.media && item.media.$ && item.media.$.url) {
               imageUrl = item.media.$.url;
-            } else {
+            } else if (item.enclosure && item.enclosure.url) {
+              imageUrl = item.enclosure.url;
+            } else if (description) {
+              // İlk img etiketini bul
               const imgTag = $("img").first();
               if (imgTag.length) {
                 imageUrl = imgTag.attr("src");
+              } else {
+                const ogImage = $('meta[property="og:image"]').attr("content");
+                if (ogImage) {
+                  imageUrl = ogImage;
+                }
               }
             }
 
@@ -217,12 +247,12 @@ export const fetchNewsFromRSS = async (): Promise<void> => {
                 fullContent = detailedContent;
               }
             }
-
+            console.log("yeni haber oluştur: ", item);
             // Yeni haber oluştur
             const news = await News.create({
               title: item.title?.trim(),
               content: fullContent,
-              description: description.substring(0, 500), // İlk 500 karakter özet olarak
+              description: description,
               imageUrl,
               url, // Haber URL'sini kaydet
               source: source.source,
